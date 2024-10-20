@@ -92,7 +92,7 @@ namespace detail {
 static inline char* ImplGetEnv(const char* name) { return getenv(name); }
 
 static inline char* ImplGetSecureEnv(const char* name) {
-#ifdef HAVE_SECURE_GETENV
+#if defined(HAVE_SECURE_GETENV) && !(defined(__HAIKU__))
     return secure_getenv(name);
 #elif defined(HAVE___SECURE_GETENV)
     return __secure_getenv(name);

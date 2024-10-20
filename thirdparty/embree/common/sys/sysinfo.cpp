@@ -43,6 +43,10 @@ namespace embree
     return "Cygwin (32bit)";
 #elif defined(__CYGWIN__) && defined(__64BIT__)
     return "Cygwin (64bit)";
+#elif defined(__HAIKU__) && defined(__64BIT__)
+    return "Haiku (64bit)";
+#elif defined(__HAIKU__) && !defined(__64BIT__)
+    return "Haiku (32bit)";
 #elif defined(__WIN32__) && !defined(__64BIT__)
     return "Windows (32bit)";
 #elif defined(__WIN32__) && defined(__64BIT__)
@@ -661,7 +665,7 @@ namespace embree
     static int nThreads = -1;
     if (nThreads != -1) return nThreads;
 
-#if defined(__MACOSX__) || defined(__ANDROID__)
+#if defined(__MACOSX__) || defined(__ANDROID__) || defined(__HAIKU__)
     nThreads = sysconf(_SC_NPROCESSORS_ONLN); // does not work in Linux LXC container
     assert(nThreads);
 #elif defined(__EMSCRIPTEN__)

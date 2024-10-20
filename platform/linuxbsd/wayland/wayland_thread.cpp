@@ -33,7 +33,11 @@
 #ifdef WAYLAND_ENABLED
 
 // FIXME: Does this cause issues with *BSDs?
+#ifndef __HAIKU__
 #include <linux/input-event-codes.h>
+#else
+#include "input-event-codes.h"
+#endif
 
 // For the actual polling thread.
 #include <poll.h>

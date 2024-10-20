@@ -41,7 +41,7 @@ namespace embree
 /// Unix Platform
 ////////////////////////////////////////////////////////////////////////////////
 
-#if defined(__UNIX__)
+#if defined(__UNIX__) || defined(__HAIKU__)
 
 #include <dlfcn.h>
 

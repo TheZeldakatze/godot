@@ -35,8 +35,16 @@
 #include "core/os/thread.h"
 #include "core/string/ustring.h"
 
+#ifdef __HAIKU__
+#include <gnu/pthread.h>
+#endif
+
 #ifdef PTHREAD_BSD_SET_NAME
 #include <pthread_np.h>
+#endif
+
+#ifdef __HAIKU__
+#define PTHREAD_NO_RENAME
 #endif
 
 static Error set_name(const String &p_name) {

@@ -2044,7 +2044,6 @@ extern PFN_vkAcquireNextImage2KHR vkAcquireNextImage2KHR;
 #define VOLK_SOURCE "volk.c"
 #include VOLK_SOURCE
 #endif
-
 /**
  * Copyright (c) 2018-2024 Arseny Kapoulkine
  *

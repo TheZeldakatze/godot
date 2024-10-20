@@ -332,7 +332,7 @@ namespace embree
 /// Unix Platform
 ////////////////////////////////////////////////////////////////////////////////
 
-#if defined(__UNIX__)
+#if defined(__UNIX__) || defined(__HAIKU__)
 
 #include <sys/mman.h>
 #include <errno.h>

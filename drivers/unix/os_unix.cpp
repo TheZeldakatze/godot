@@ -68,6 +68,10 @@
 #include <uvm/uvm_extern.h>
 #endif
 
+#if defined(__HAIKU__)
+#include <image.h>
+#endif
+
 #include <dlfcn.h>
 #include <errno.h>
 #include <poll.h>
@@ -951,6 +955,18 @@ String OS_Unix::get_executable_path() const {
 	String path = String::utf8(resolved_path);
 	delete[] resolved_path;
 
+	return path;
+#elif defined(__HAIKU__)
+	int cookie = 0;
+	image_info info;
+	char path[PATH_MAX];
+	while(get_next_image_info(B_CURRENT_TEAM, &cookie, &info) == B_OK) {
+		if(info.type == B_APP_IMAGE) {
+			strncpy(path, info.name, PATH_MAX);
+			break;
+		}
+	}
+	
 	return path;
 #else
 	ERR_PRINT("Warning, don't know how to obtain executable path on this OS! Please override this function properly.");

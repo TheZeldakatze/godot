@@ -35,6 +35,10 @@
 
 int detect_prime();
 
+#ifdef __HAIKU__
+#define quick_exit(i) exit(i)
+#endif
+
 #endif // X11_ENABLED && GLES3_ENABLED
 
 #endif // DETECT_PRIME_X11_H

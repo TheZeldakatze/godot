@@ -47,6 +47,10 @@
 // To prevent shadowing warnings.
 #undef glGetString
 
+#ifdef __HAIKU__
+#define quick_exit(i) exit(i)
+#endif
+
 // Runs inside a child. Exiting will not quit the engine.
 void DetectPrimeEGL::create_context(EGLenum p_platform_enum) {
 #if defined(GLAD_ENABLED)
@@ -65,12 +69,13 @@ void DetectPrimeEGL::create_context(EGLenum p_platform_enum) {
 		egl_display = eglGetPlatformDisplayEXT(p_platform_enum, nullptr, nullptr);
 #endif
 	} else {
+		print_verbose("1");
 		egl_display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 	}
 
 	EGLConfig egl_config;
 	EGLContext egl_context = EGL_NO_CONTEXT;
-
+	print_verbose("2");
 	eglInitialize(egl_display, nullptr, nullptr);
 
 #if defined(GLAD_ENABLED)
@@ -79,9 +84,9 @@ void DetectPrimeEGL::create_context(EGLenum p_platform_enum) {
 		quick_exit(1);
 	}
 #endif
-
+	print_verbose("3");
 	eglBindAPI(EGL_OPENGL_API);
-
+	print_verbose("4");
 	EGLint attribs[] = {
 		EGL_RED_SIZE,
 		1,
@@ -93,10 +98,10 @@ void DetectPrimeEGL::create_context(EGLenum p_platform_enum) {
 		24,
 		EGL_NONE,
 	};
-
+print_verbose("5");
 	EGLint config_count = 0;
 	eglChooseConfig(egl_display, attribs, &egl_config, 1, &config_count);
-
+	print_verbose("6");
 	EGLint context_attribs[] = {
 		EGL_CONTEXT_MAJOR_VERSION, 3,
 		EGL_CONTEXT_MINOR_VERSION, 3,
@@ -104,12 +109,14 @@ void DetectPrimeEGL::create_context(EGLenum p_platform_enum) {
 	};
 
 	egl_context = eglCreateContext(egl_display, egl_config, EGL_NO_CONTEXT, context_attribs);
+	print_verbose("7");
 	if (egl_context == EGL_NO_CONTEXT) {
 		print_verbose("Unable to create an EGL context, GPU detection skipped.");
 		quick_exit(1);
 	}
 
 	eglMakeCurrent(egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, egl_context);
+	print_verbose("8");
 }
 
 int DetectPrimeEGL::detect_prime(EGLenum p_platform_enum) {

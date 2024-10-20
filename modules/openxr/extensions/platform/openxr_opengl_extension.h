@@ -64,6 +64,8 @@ private:
 	static XrGraphicsBindingOpenGLWin32KHR graphics_binding_gl;
 #elif defined(ANDROID_ENABLED)
 	static XrGraphicsBindingOpenGLESAndroidKHR graphics_binding_gl;
+#elif defined(__HAIKU__) // Haiku (TODO: shouldn't it be like this for all Wayland interfaces?)
+	XrGraphicsBindingOpenGLWaylandKHR graphics_binding_gl;
 #else // Linux/X11
 	static XrGraphicsBindingOpenGLXlibKHR graphics_binding_gl;
 #endif

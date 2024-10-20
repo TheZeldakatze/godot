@@ -209,6 +209,7 @@ def configure(env: "SConsEnvironment"):
     ## Dependencies
 
     if env["use_sowrap"]:
+        print("use_sowrap")
         env.Append(CPPDEFINES=["SOWRAP_ENABLED"])
 
     if env["wayland"]:
@@ -474,7 +475,8 @@ def configure(env: "SConsEnvironment"):
 
         env.Prepend(CPPPATH=["#platform/linuxbsd", "#thirdparty/linuxbsd_headers/wayland/"])
         env.Append(CPPDEFINES=["WAYLAND_ENABLED"])
-        env.Append(LIBS=["rt"])  # Needed by glibc, used by _allocate_shm_file
+        if platform.system() != "Haiku":
+        	env.Append(LIBS=["rt"])  # Needed by glibc, used by _allocate_shm_file
 
     if env["vulkan"]:
         env.Append(CPPDEFINES=["VULKAN_ENABLED", "RD_ENABLED"])
@@ -507,10 +509,14 @@ def configure(env: "SConsEnvironment"):
         env.Append(LINKFLAGS=["-lkvm"])
 
     # Link those statically for portability
-    if env["use_static_cpp"]:
+    if env["use_static_cpp"] and platform.system() != "Haiku":
         env.Append(LINKFLAGS=["-static-libgcc", "-static-libstdc++"])
         if env["use_llvm"] and platform.system() != "FreeBSD":
             env["LINKCOM"] = env["LINKCOM"] + " -l:libatomic.a"
     else:
         if env["use_llvm"] and platform.system() != "FreeBSD":
             env.Append(LIBS=["atomic"])
+    
+    # On Haiku, include libnetwork
+    if platform.system() == "Haiku":
+        env.Append(LIBS=["network"])
